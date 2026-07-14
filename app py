@@ -1,0 +1,252 @@
+afrom flask import Flask, render_template, request, redirect, send_file
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+import os
+import PyPDF2
+
+app = Flask(__name__)
+
+app.config['SECRET_KEY'] = 'secret123'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
+db = SQLAlchemy(app)
+
+# -------------------------
+# UPLOAD FOLDER
+# -------------------------
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+ALLOWED_EXTENSIONS = {"pdf"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".",1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# -------------------------
+# INTERVIEW PAGE
+# -------------------------
+
+@app.route("/interview")
+def interview():
+    return render_template("interview.html")
+
+
+# -------------------------
+# DATABASE MODEL
+# -------------------------
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+
+
+# -------------------------
+# SKILLS DATABASE
+# -------------------------
+
+skills_db = [
+"python","java","machine learning",
+"sql","html","css","javascript",
+"react","flask","django","aws"
+]
+
+jobs = {
+"python":"Python Developer",
+"machine learning":"AI Engineer",
+"sql":"Database Developer",
+"html":"Frontend Developer",
+"react":"React Developer"
+}
+
+
+# -------------------------
+# PDF TEXT EXTRACT
+# -------------------------
+
+def extract_text(path):
+
+    text = ""
+
+    try:
+        with open(path, "rb") as file:
+            reader = PyPDF2.PdfReader(file)
+
+            for page in reader.pages:
+                content = page.extract_text()
+                if content:
+                    text += content
+
+    except Exception as e:
+        print("PDF Error:", e)
+
+    return text.lower()
+
+
+# -------------------------
+# RESUME ANALYSIS
+# -------------------------
+
+def analyze_resume(text):
+
+    found_skills=[]
+    suggestions=[]
+
+    for skill in skills_db:
+        if skill in text:
+            found_skills.append(skill)
+
+    score=len(found_skills)*10
+
+    if score>100:
+        score=100
+
+    missing=list(set(skills_db)-set(found_skills))
+
+    for m in missing[:5]:
+        suggestions.append("Add skill: "+m)
+
+    job_list=[]
+
+    for skill in found_skills:
+        if skill in jobs:
+            job_list.append(jobs[skill])
+
+    return score,found_skills,suggestions,job_list
+
+
+# -------------------------
+# ROUTES
+# -------------------------
+
+@app.route("/")
+def home():
+    return render_template("login.html")
+
+
+@app.route("/signup",methods=["GET","POST"])
+def signup():
+
+    if request.method=="POST":
+
+        username=request.form["username"]
+        password=request.form["password"]
+
+        user=User(username=username,password=password)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect("/")
+
+    return render_template("signup.html")
+
+
+@app.route("/login",methods=["POST"])
+def login():
+
+    username=request.form["username"]
+    password=request.form["password"]
+
+    user=User.query.filter_by(username=username,password=password).first()
+
+    if user:
+        return redirect("/dashboard")
+
+    return "Invalid Login"
+
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+
+# -------------------------
+# RESUME UPLOAD
+# -------------------------
+
+@app.route("/upload", methods=["POST"])
+def upload():
+
+    if "resume" not in request.files:
+        return "No file uploaded"
+
+    file = request.files["resume"]
+
+    if file.filename == "":
+        return "No file selected"
+
+    if not allowed_file(file.filename):
+        return "Only PDF files allowed"
+
+    filename = secure_filename(file.filename)
+
+    path = os.path.join(UPLOAD_FOLDER, filename)
+
+    file.save(path)
+
+    text = extract_text(path)
+
+    score,skills,suggestions,jobs = analyze_resume(text)
+
+    return render_template(
+        "dashboard.html",
+        score=score,
+        skills=skills,
+        suggestions=suggestions,
+        jobs=jobs
+    )
+
+
+# -------------------------
+# INTERVIEW REPORT PDF
+# -------------------------
+
+@app.route("/download_report")
+def download_report():
+
+    file_path = "interview_report.pdf"
+
+    styles = getSampleStyleSheet()
+
+    content = []
+
+    content.append(Paragraph("AI Interview Report", styles['Title']))
+    content.append(Spacer(1,20))
+
+    content.append(Paragraph("Candidate Name : Arvind Yadav", styles['Normal']))
+    content.append(Paragraph("Total Questions : 20", styles['Normal']))
+    content.append(Paragraph("Average Score : 7.5 / 10", styles['Normal']))
+
+    content.append(Spacer(1,20))
+
+    content.append(Paragraph("Performance : Good", styles['Normal']))
+
+    content.append(Spacer(1,20))
+
+    content.append(Paragraph(
+    "Suggestion : Improve explanation of technical answers.",
+    styles['Normal']))
+
+    pdf = SimpleDocTemplate(file_path)
+
+    pdf.build(content)
+
+    return send_file(file_path, as_attachment=True)
+
+
+# -------------------------
+
+if __name__=="__main__":
+
+    with app.app_context():
+        db.create_all()
+
+    app.run(debug=True)
