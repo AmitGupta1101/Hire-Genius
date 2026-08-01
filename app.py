@@ -1,6 +1,7 @@
-afrom flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, redirect, send_file, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 import os
@@ -45,7 +46,7 @@ def interview():
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(255))
 
 
 # -------------------------
@@ -131,15 +132,25 @@ def home():
     return render_template("login.html")
 
 
-@app.route("/signup",methods=["GET","POST"])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
 
-    if request.method=="POST":
+    if request.method == "POST":
 
-        username=request.form["username"]
-        password=request.form["password"]
+        username = request.form["username"]
+        password = request.form["password"]
 
-        user=User(username=username,password=password)
+        existing_user = User.query.filter_by(username=username).first()
+
+        if existing_user:
+            return "Username already exists"
+
+        hashed_password = generate_password_hash(password)
+
+        user = User(
+            username=username,
+            password=hashed_password
+        )
 
         db.session.add(user)
         db.session.commit()
@@ -149,25 +160,42 @@ def signup():
     return render_template("signup.html")
 
 
-@app.route("/login",methods=["POST"])
+@app.route("/login", methods=["POST"])
 def login():
 
-    username=request.form["username"]
-    password=request.form["password"]
+    username = request.form["username"]
+    password = request.form["password"]
 
-    user=User.query.filter_by(username=username,password=password).first()
+    user = User.query.filter_by(username=username).first()
 
-    if user:
+    if user and check_password_hash(user.password, password):
+        session["user"] = user.username
         return redirect("/dashboard")
 
     return "Invalid Login"
 
+@app.route("/logout")
+def logout():
+
+    session.pop("user", None)
+
+    return redirect("/")
+
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
 
+    if "user" not in session:
+        return redirect("/")
 
+    return render_template(
+        "dashboard.html",
+        username=session["user"],
+        score=0,
+        skills=[],
+        suggestions=[],
+        jobs=[]
+    )
 # -------------------------
 # RESUME UPLOAD
 # -------------------------
@@ -195,13 +223,13 @@ def upload():
     text = extract_text(path)
 
     score,skills,suggestions,jobs = analyze_resume(text)
-
     return render_template(
-        "dashboard.html",
-        score=score,
-        skills=skills,
-        suggestions=suggestions,
-        jobs=jobs
+    "dashboard.html",
+    username=session["user"],
+    score=score,
+    skills=skills,
+    suggestions=suggestions,
+    jobs=jobs
     )
 
 

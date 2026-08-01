@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Hire Genius - AI Resume Analyzer</title>
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<script src="{{ url_for('static', filename='js/dash.js') }}"></script>
+</head>
+
+<body>
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p>Analyzing Resume with AI...</p>
+</div>
+<!-- NAVBAR -->
+<div class="navbar">
+
+ <div class="logo">Hire Genius</div>
+
+<div class="nav-links">
+
+ <a href="#">Home</a>
+
+   <a href="#">Dashboard</a>
+
+   <a href="#">Feedback</a>
+
+   <a href="#">Contact</a>
+
+   <a href="/logout">
+    <button class="login">Logout</button>
+    </a>
+
+</div>
+
+<div class="nav-right">
+    <a href="https://www.canva.com/resumes/templates/" target="_blank">
+    <button class="ai-btn">Create Resume AI</button>
+    </a>
+
+    <span style="color:white;font-weight:bold;margin-left:15px;">
+    👤 {{ username }}
+    </span>
+
+</div>
+
+</div>
+
+<!-- MAIN DASHBOARD -->
+
+<div class="container">
+
+<h1>AI Resume Analyzer Dashboard</h1>
+<!-- ================= HERO SECTION ================= -->
+
+<div class="hero-dashboard">
+
+    <div class="hero-left">
+
+        <h2>👋 Welcome Back, {{ username }}</h2>
+
+        <p>Your AI Career Assistant is ready.</p>
+
+        <div class="resume-status">
+
+            <span>📄 Resume Status</span>
+
+            <span class="status">Ready</span>
+
+        </div>
+
+    </div>
+
+    <div class="hero-right">
+
+        <div class="hero-card">
+
+            <h4>Today's Date</h4>
+
+            <p id="todayDate"></p>
+
+        </div>
+
+        <div class="hero-card">
+
+            <h4>Last Analysis</h4>
+
+            <p>Just Now</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="stats">
+
+   <div class="stat-card">
+
+    <div class="card-top blue"></div>
+
+    <div class="icon">📊</div>
+
+    <h2>{{ score if score else 0 }}%</h2>
+
+    <p>ATS Score</p>
+
+   {% if score >= 80 %}
+<span class="status excellent">Excellent</span>
+
+{% elif score >= 60 %}
+<span class="status good">Good</span>
+
+{% elif score > 0 %}
+<span class="status average">Needs Improvement</span>
+
+{% else %}
+<span class="status pending">Not Analyzed</span>
+{% endif %}
+
+</div>
+
+    <div class="stat-card">
+
+    <div class="card-top pink"></div>
+
+    <div class="icon">🧠</div>
+
+    <h2>{{ skills|length if skills else 0 }}</h2>
+
+    <p>Skills Found</p>
+
+    <span class="status-text good">
+        Updated
+    </span>
+</div>
+ <div class="stat-card">
+
+    <div class="card-top purple"></div>
+
+    <div class="icon">🎤</div>
+   <h2>0</h2>
+
+  <p>AI Interview</p>
+
+    <a href="/interview">
+    <button class="mini-btn">
+        Start Now
+    </button>
+   </a>
+</div>
+<div class="stat-card">
+
+    <div class="card-top green"></div>
+
+    <div class="icon">📄</div>
+
+    <h2>0</h2>
+
+    <p>Reports</p>
+
+    <span class="status-text good">
+        Ready
+    </span>
+</div>
+</div>
+<!-- Upload Resume -->
+
+<div class="upload">
+
+<form
+action="/upload"
+method="POST"
+enctype="multipart/form-data"
+onsubmit="showLoader()">
+
+<h3>Upload Your Resume</h3>
+
+<br>
+
+<label class="upload-label" for="resume" id="fileLabel">
+    📄 Choose Resume (PDF)
+</label>
+
+<input
+type="file"
+id="resume"
+name="resume"
+accept=".pdf"
+hidden
+required>
+
+<p id="fileName" style="margin-top:15px;color:#00c6ff;font-weight:bold;">
+    No file selected
+</p>
+
+<br><br>
+
+<button type="submit">📄 Resume Analysis</button>
+
+</form>
+
+</div>
+
+<br>
+
+<!-- Interview -->
+
+<a href="/interview">
+
+<button class="interview-btn">🎤 Mock Interview</button>
+
+</a>
+
+<!-- RESULT -->
+
+<div class="analytics">
+
+    <!-- ATS Circle -->
+    <div class="score-card">
+
+        <div class="circle">
+
+            <svg width="180" height="180">
+
+                <!-- Background Circle -->
+                <circle
+                    class="bg"
+                    cx="90"
+                    cy="90"
+                    r="70"
+                    fill="none"
+                    stroke="#444"
+                    stroke-width="12">
+                </circle>
+
+                <!-- Progress Circle -->
+                <circle
+                    class="progress"
+                    cx="90"
+                    cy="90"
+                    r="70"
+                    fill="none"
+                    stroke="#00c6ff"
+                    stroke-width="12"
+                    stroke-linecap="round"
+                    transform="rotate(-90 90 90)">
+                </circle>
+
+            </svg>
+
+            <div class="score-text">
+                <span id="scoreCounter">0</span>%
+            </div>
+
+        </div>
+
+        <h3>ATS Score</h3>
+
+    </div>
+    <!-- Skills -->
+
+    <div class="skills-box">
+
+        <h3>Detected Skills</h3>
+
+        {% if skills %}
+
+        {% for skill in skills %}
+
+        <div class="skill">
+
+            <span>{{ skill|capitalize }}</span>
+
+          <div class="bar">
+
+            <div class="fill" style="width: {{ [60 + loop.index * 8, 100] | min }}%;"></div>
+
+          </div>
+
+         </div>
+
+        {% endfor %} 
+
+        {% else %}
+
+        <p>No resume analyzed yet.</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Suggestions -->
+
+    <div class="tips-box">
+
+        <h3>🤖 AI Suggestions</h3>
+
+        {% if suggestions %}
+
+        <ul>
+
+            {% for s in suggestions %}
+
+            <li>{{ s }}</li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% else %}
+
+        <p>Upload a resume to receive AI suggestions.</p>
+
+        {% endif %}
+
+    </div>
+<div class="activity-box">
+
+    <h3>📈 Recent Activity</h3>
+
+    <div class="activity-item">
+        <span>📄 Resume Uploaded</span>
+        <small>Today</small>
+    </div>
+
+    <div class="activity-item">
+        <span>🤖 AI Analysis Completed</span>
+        <small>Just Now</small>
+    </div>
+
+    <div class="activity-item">
+        <span>🎯 ATS Score Generated</span>
+        <small>Success</small>
+    </div>
+
+</div>
+</div>
+<!-- FEATURES -->
+
+ <div class="features">
+
+  <div class="card">
+    <h3>Resume Analysis</h3>
+    <p>AI scans resume and detects important skills.</p>
+  </div>
+
+   <div class="card">
+    <h3>Mock Interview</h3>
+    <p>Practice real interview questions with AI.</p>
+   </div>
+
+   <div class="card">
+     <h3>Job Suggestions</h3>
+      <p>Find jobs based on your skills and resume.</p>
+    </div>
+
+ </div>
+
+</div>
+
+</body>
+</html>

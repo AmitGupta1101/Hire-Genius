@@ -1,0 +1,326 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Background */
+
+body{
+
+height:100vh;
+
+background:
+linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),
+url("https://images.unsplash.com/photo-1620712943543-bcc4688e7485");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:white;
+
+}
+
+/* Main Container */
+
+.container{
+
+background:rgba(255,255,255,0.12);
+
+backdrop-filter:blur(15px);
+
+padding: 50px;
+
+border-radius:18px;
+
+text-align:center;
+
+width:750px;
+
+box-shadow:0px 15px 50px rgba(0,0,0,0.5);
+
+transition:0.4s;
+
+}
+
+.container:hover{
+
+transform:translateY(-5px);
+
+}
+
+/* Title */
+
+h1{
+
+color:white;
+
+margin-bottom:25px;
+
+font-size:34px;
+
+letter-spacing:1px;
+
+}
+
+/* Upload Box */
+
+.upload{
+
+border:2px dashed rgba(255,255,255,0.7);
+
+padding:25px;
+
+border-radius:12px;
+
+margin-top:15px;
+
+transition:0.3s;
+
+}
+
+.upload:hover{
+
+background:rgba(255,255,255,0.1);
+
+}
+
+/* File Input */
+
+input[type="file"]{
+
+margin-top:15px;
+
+padding:10px;
+
+background:white;
+
+border-radius:6px;
+
+border:none;
+
+font-size:14px;
+
+}
+
+/* Buttons */
+
+button{
+
+padding:12px 28px;
+
+background:linear-gradient(to right,#00c6ff,#0072ff);
+
+color:white;
+
+border:none;
+
+cursor:pointer;
+
+margin-top:15px;
+
+font-size:16px;
+
+border-radius:8px;
+
+transition:0.3s;
+
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+}
+
+button:hover{
+
+transform:scale(1.07);
+
+box-shadow:0 8px 25px rgba(0,0,0,0.5);
+
+}
+
+/* Interview Button */
+
+.interview-btn{
+
+background:linear-gradient(to right,#ff512f,#dd2476);
+padding: 12px 30px;
+
+}
+
+/* Result Box */
+
+#result{
+
+margin-top:25px;
+
+background:rgba(255,255,255,0.18);
+
+padding:25px;
+
+border-radius:12px;
+
+text-align:left;
+
+box-shadow:0px 5px 25px rgba(0,0,0,0.3);
+
+}
+
+/* Headings inside result */
+
+#result h2{
+
+margin-bottom:10px;
+
+color:#00eaff;
+
+}
+
+#result h3{
+
+margin-top:15px;
+
+}
+
+/* List Style */
+
+ul{
+
+margin-top:10px;
+
+padding-left:22px;
+
+}
+
+li{
+
+margin-bottom:6px;
+
+}
+
+.resume-builder{
+
+margin-top:25px;
+
+background:rgba(255,255,255,0.15);
+
+padding:20px;
+
+border-radius:10px;
+
+}
+
+.resume-builder button{
+
+margin:8px;
+
+background:linear-gradient(to right,#43cea2,#185a9d);
+
+}
+
+/* Resume Editor */
+
+textarea{
+
+width:100%;
+
+margin-top:15px;
+
+padding:12px;
+
+border-radius:8px;
+
+border:none;
+
+resize:none;
+
+font-size:15px;
+
+font-family:Georgia, serif;
+
+line-height:1.6;
+
+color:black;
+
+}
+
+/* AI Tips */
+
+.tips{
+
+margin-top:20px;
+
+padding:18px;
+
+background:rgba(255,255,255,0.2);
+
+border-radius:10px;
+
+}
+
+/* Responsive Design */
+
+@media(max-width:768px){
+
+.container{
+
+width:90%;
+
+padding:25px;
+
+}
+
+h1{
+
+font-size:26px;
+
+}
+
+}
+.resume-builder{
+
+margin-top:25px;
+
+background:rgba(255,255,255,0.15);
+
+padding:20px;
+
+border-radius:10px;
+
+}
+
+.resume-builder button{
+
+margin:8px;
+
+background:linear-gradient(to right,#43cea2,#185a9d);
+}
+.strength{
+
+height:10px;
+
+background:#333;
+
+border-radius:20px;
+
+margin-top:15px;
+
+overflow:hidden;
+
+}
+
+.strength-fill{
+
+height:100%;
+
+width:85%;
+
+background:linear-gradient(to right,#00c6ff,#00ff99);
+
+animation:grow 2s;
+
+}

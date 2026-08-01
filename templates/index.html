@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>AI Resume Analyzer</title>
+<link rel="stylesheet" href="/static/css/index.css">
+</head>
+
+<body>
+
+<h1>AI Resume Analyzer & Interview Trainer</h1>
+
+<input type="file" id="resume">
+<button onclick="uploadResume()">Analyze Resume</button>
+
+<div id="result"></div>
+
+<script>
+
+function uploadResume(){
+
+let fileInput = document.getElementById("resume").files[0]
+
+let formData = new FormData()
+formData.append("resume",fileInput)
+
+fetch("/upload",{
+method:"POST",
+body:formData
+})
+.then(res=>res.json())
+.then(data=>{
+
+let html = ""
+
+html += "<h2>Resume Score : "+data.score+"/100</h2>"
+
+html += "<h3>Detected Skills</h3>"
+html += data.skills.join(", ")
+
+html += "<h3>Missing Skills</h3>"
+html += data.missing.join(", ")
+
+html += "<h3>Interview Questions</h3><ul>"
+
+data.questions.forEach(q=>{
+html += "<li>"+q+"</li>"
+})
+
+html += "</ul>"
+
+document.getElementById("result").innerHTML = html
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
