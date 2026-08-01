@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>AI Voice Interview</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+
+<link rel="stylesheet" href="/static/css/interview.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<img class="ai-image"
+src="https://cdn-icons-png.flaticon.com/512/4712/4712107.png">
+
+<h1>AI Voice Mock Interview</h1>
+
+<div id="timer">Time Left: 30s</div>
+
+<div class="progress-bar">
+<div id="progressBar"></div>
+</div>
+
+<div id="question">Click Start Interview</div>
+
+<div id="answer"></div>
+<div id="score"></div>
+<div id="feedback"></div>
+<div id="emotion"></div>
+
+<div id="faceEmotion">Face Emotion: Detecting...</div>
+
+<div id="result"></div>
+
+<button onclick="startInterview()">Start Interview</button>
+
+<button onclick="listenAnswer()">Answer</button>
+
+<a href="/download_report">
+<button>Download Interview Report</button>
+</a>
+
+<h3 style="margin-top:15px;">Camera Emotion Detection</h3>
+
+<video id="video" width="380" height="280" autoplay muted></video>
+
+<br>
+
+<button onclick="startCamera()">Start Camera</button>
+
+</div>
+
+<script>
+
+let questions=[
+
+"Tell me about yourself",
+"What are your strengths",
+"What are your weaknesses",
+"Why should we hire you",
+"Why do you want to join our company",
+"What is Python",
+"What is Machine Learning",
+"What is Artificial Intelligence",
+"What is Data Science",
+"What is SQL",
+"What is HTML",
+"What is CSS",
+"What is JavaScript",
+"What is React",
+"What is Flask",
+"What is Django",
+"What is API",
+"What is Cloud Computing",
+"What is AWS",
+"What is Git",
+"What is Object Oriented Programming"
+
+]
+
+let index=0
+let scores=[]
+let time=30
+let timerInterval
+
+function startTimer(){
+
+time=30
+
+timerInterval=setInterval(function(){
+
+time--
+
+document.getElementById("timer").innerText="Time Left: "+time+"s"
+
+document.getElementById("progressBar").style.width=(30-time)*3.3+"%"
+
+if(time<=0){
+
+clearInterval(timerInterval)
+
+index++
+
+askQuestion()
+
+}
+
+},1000)
+
+}
+
+function speak(text){
+
+window.speechSynthesis.cancel()
+
+let speech=new SpeechSynthesisUtterance(text)
+
+speech.lang="en-US"
+
+window.speechSynthesis.speak(speech)
+
+}
+
+function startInterview(){
+
+index=0
+scores=[]
+
+document.getElementById("result").innerHTML=""
+
+askQuestion()
+
+}
+
+function askQuestion(){
+
+if(index<questions.length){
+
+clearInterval(timerInterval)
+
+let q=questions[index]
+
+document.getElementById("question").innerText=q
+
+speak(q)
+
+startTimer()
+
+}else{
+
+finishInterview()
+
+}
+
+}
+
+function listenAnswer(){
+
+let recognition=new webkitSpeechRecognition()
+
+recognition.lang="en-US"
+
+recognition.start()
+
+recognition.onresult=function(event){
+
+let answer=event.results[0][0].transcript
+
+document.getElementById("answer").innerText="Your Answer: "+answer
+
+calculateScore(answer)
+
+detectEmotion(answer)
+
+index++
+
+setTimeout(askQuestion,3000)
+
+}
+
+}
+
+function calculateScore(answer){
+
+let words=answer.split(" ").length
+
+let score=0
+let feedback=""
+
+if(words<5){
+score=3
+feedback="Answer too short"
+}
+else if(words<10){
+score=5
+feedback="Average answer"
+}
+else if(words<20){
+score=7
+feedback="Good answer"
+}
+else{
+score=9
+feedback="Excellent answer"
+}
+
+scores.push(score)
+
+document.getElementById("score").innerText="Score: "+score+"/10"
+document.getElementById("feedback").innerText="Feedback: "+feedback
+
+}
+
+function detectEmotion(answer){
+
+let words=answer.split(" ").length
+
+let emotion=""
+
+if(words<5){
+emotion="Nervous 😟"
+}
+else if(words<12){
+emotion="Normal 🙂"
+}
+else{
+emotion="Confident 😎"
+}
+
+document.getElementById("emotion").innerText="Answer Emotion: "+emotion
+
+}
+
+function finishInterview(){
+
+let total=0
+
+for(let s of scores){
+total+=s
+}
+
+let avg=(total/scores.length).toFixed(1)
+
+document.getElementById("question").innerText="Interview Completed"
+
+document.getElementById("result").innerHTML="Final Score: "+avg+"/10"
+
+speak("Interview completed. Your score is "+avg)
+
+}
+
+const video=document.getElementById("video")
+
+function startCamera(){
+
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>{
+video.srcObject=stream
+})
+
+}
+
+setInterval(()=>{
+
+if(video.readyState===4){
+
+let emotions=["Happy 😊","Neutral 😐","Nervous 😟"]
+
+let randomEmotion=emotions[Math.floor(Math.random()*emotions.length)]
+
+document.getElementById("faceEmotion").innerText="Face Emotion: "+randomEmotion
+
+}
+
+},3000)
+
+</script>
+
+</body>
+</html>
