@@ -1,41 +1,608 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Signup - AI Career Platform</title>
-<link rel="stylesheet" href="/static/css/signup.css">
+    <title>Create Account | HireGenius</title>
+
+    <link rel="stylesheet" href="/static/css/signup.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
 
-<div class="container">
+<!-- ==============================
+     BACKGROUND EFFECTS
+================================= -->
+<div class="background-effects">
+    <span class="glow glow-1"></span>
+    <span class="glow glow-2"></span>
+    <span class="glow glow-3"></span>
+</div>
 
-<div class="left">
 
-<img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+<div class="page">
+
+    <!-- =================================
+         LEFT SIDE - INTRO
+    ================================== -->
+    <section class="intro">
+
+        <!-- BRAND -->
+        <div class="brand">
+
+            <div class="brand-logo">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+
+            <div>
+                <h2>Hire<span>Genius</span></h2>
+                <p>AI Career Assistant</p>
+            </div>
+
+        </div>
+
+
+        <!-- INTRO CONTENT -->
+        <div class="intro-content">
+
+            <!-- AI VISUAL -->
+            <div class="ai-visual">
+
+                <div class="orbit orbit-1"></div>
+                <div class="orbit orbit-2"></div>
+                <div class="orbit orbit-3"></div>
+
+                <div class="robot">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+
+
+                <div class="floating-card card-one">
+                    <i class="fa-solid fa-file-circle-check"></i>
+                </div>
+
+                <div class="floating-card card-two">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div class="floating-card card-three">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+
+            </div>
+
+
+            <!-- HEADING -->
+            <h1>
+                Start Your<br>
+                Career <span>Journey.</span>
+            </h1>
+
+
+            <p class="intro-text">
+                Create your HireGenius profile and unlock
+                AI-powered tools that help you prepare,
+                improve and get closer to your dream job.
+            </p>
+
+
+            <!-- FEATURES -->
+            <div class="features">
+
+                <div class="feature">
+
+                    <div class="feature-icon blue">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+
+                    <span>
+                        AI Resume<br>
+                        Analysis
+                    </span>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon purple">
+                        <i class="fa-solid fa-microphone"></i>
+                    </div>
+
+                    <span>
+                        AI Interview<br>
+                        Practice
+                    </span>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon cyan">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <span>
+                        Career<br>
+                        Insights
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         RIGHT SIDE - SIGNUP CARD
+    ================================== -->
+    <section class="signup-area">
+
+        <div class="signup-card">
+
+
+            <!-- MOBILE BRAND -->
+            <div class="mobile-brand">
+
+                <div class="brand-logo">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+
+                <strong>
+                    Hire<span>Genius</span>
+                </strong>
+
+            </div>
+
+
+
+            <!-- SIGNUP HEADING -->
+            <div class="signup-heading">
+
+                <div class="heading-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <div>
+                    <h1>Create Your Account</h1>
+
+                    <p>
+                        Build your profile and start your
+                        AI-powered career journey.
+                    </p>
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 FLASH / VALIDATION MESSAGES
+            ================================== -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="messages-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+
+                                {% if category == "success" %}
+
+                                    <i class="fa-solid fa-circle-check"></i>
+
+                                {% else %}
+
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {% endif %}
+
+                                <span>{{ message }}</span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+
+            <!-- =================================
+                 SIGNUP FORM
+            ================================== -->
+            <form method="POST" id="signupForm">
+
+
+                <!-- FULL NAME -->
+                <div class="form-group">
+
+                    <label for="full_name">
+                        Full Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-regular fa-user input-icon"></i>
+
+                        <input
+                            type="text"
+                            id="full_name"
+                            name="full_name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            value="{{ request.form.get('full_name', '') }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- USERNAME -->
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-at input-icon"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Choose a username"
+                            autocomplete="username"
+                            value="{{ request.form.get('username', '') }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-regular fa-envelope input-icon"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            autocomplete="email"
+                            value="{{ request.form.get('email', '') }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock input-icon"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('password', 'eyeIcon1')"
+                            aria-label="Show password"
+                        >
+
+                            <i
+                                id="eyeIcon1"
+                                class="fa-regular fa-eye"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                    <!-- PASSWORD HINT -->
+                    <div class="password-hint">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>Use at least 6 characters</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CONFIRM PASSWORD -->
+                <div class="form-group">
+
+                    <label for="confirm_password">
+                        Confirm Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-shield-halved input-icon"></i>
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Confirm your password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('confirm_password', 'eyeIcon2')"
+                            aria-label="Show confirm password"
+                        >
+
+                            <i
+                                id="eyeIcon2"
+                                class="fa-regular fa-eye"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TERMS -->
+                <div class="terms-wrapper">
+
+                    <label class="terms">
+
+                        <input
+                            type="checkbox"
+                            name="terms"
+                            id="terms"
+                            required
+                        >
+
+                        <span class="custom-checkbox">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+
+                        <span class="terms-text">
+                            I agree to the
+                            <a href="#" onclick="return false;">
+                                Terms
+                            </a>
+                            &
+                            <a href="#" onclick="return false;">
+                                Privacy Policy
+                            </a>
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- SUBMIT BUTTON -->
+                <button
+                    type="submit"
+                    class="signup-button"
+                    id="signupButton"
+                >
+
+                    <span>Create Account</span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+
+            <!-- DIVIDER -->
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+
+
+            <!-- LOGIN -->
+            <p class="login-text">
+
+                Already have an account?
+
+                <a href="/">
+                    Login
+                </a>
+
+            </p>
+
+
+
+            <!-- SECURITY -->
+            <div class="security">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Your information is securely protected
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
 
-<div class="right">
 
-<h2>Create Account</h2>
 
-<form method="POST">
+<!-- =================================
+     JAVASCRIPT
+================================== -->
+<script>
 
-<input type="text" name="username" placeholder="Enter Username" required>
+/* ==============================
+   PASSWORD TOGGLE
+============================== */
 
-<input type="password" name="password" placeholder="Enter Password" required>
+function togglePassword(inputId, iconId) {
 
-<button type="submit">Signup</button>
+    const passwordInput =
+        document.getElementById(inputId);
 
-</form>
+    const eyeIcon =
+        document.getElementById(iconId);
 
-<a href="/">Already have an account? Login</a>
 
-</div>
+    if (passwordInput.type === "password") {
 
-</div>
+        passwordInput.type = "text";
+
+        eyeIcon.classList.remove("fa-eye");
+
+        eyeIcon.classList.add("fa-eye-slash");
+
+    } else {
+
+        passwordInput.type = "password";
+
+        eyeIcon.classList.remove("fa-eye-slash");
+
+        eyeIcon.classList.add("fa-eye");
+
+    }
+
+}
+
+
+
+/* ==============================
+   CLIENT-SIDE PASSWORD CHECK
+============================== */
+
+document
+    .getElementById("signupForm")
+    .addEventListener("submit", function(event) {
+
+        const password =
+            document.getElementById("password").value;
+
+        const confirmPassword =
+            document.getElementById("confirm_password").value;
+
+
+        if (password.length < 6) {
+
+            event.preventDefault();
+
+            alert("Password must be at least 6 characters.");
+
+            return;
+
+        }
+
+
+        if (password !== confirmPassword) {
+
+            event.preventDefault();
+
+            alert("Passwords do not match.");
+
+            return;
+
+        }
+
+    });
+
+
+
+/* ==============================
+   BUTTON LOADING
+============================== */
+
+document
+    .getElementById("signupForm")
+    .addEventListener("submit", function(event) {
+
+        const password =
+            document.getElementById("password").value;
+
+        const confirmPassword =
+            document.getElementById("confirm_password").value;
+
+
+        if (
+            password.length >= 6 &&
+            password === confirmPassword
+        ) {
+
+            const button =
+                document.getElementById("signupButton");
+
+            button.classList.add("loading");
+
+            button.querySelector("span").textContent =
+                "Creating Account...";
+
+            button.querySelector("i").className =
+                "fa-solid fa-spinner";
+
+        }
+
+    });
+
+</script>
 
 </body>
-
 </html>

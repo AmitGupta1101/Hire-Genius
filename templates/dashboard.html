@@ -1,366 +1,786 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hire Genius - AI Resume Analyzer</title>
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"> -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-<script src="{{ url_for('static', filename='js/dash.js') }}"></script>
+    <title>Hire Genius - Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <script>
+    window.ATS_SCORE = Number("{{ score|default(0) }}");
+    </script>
 </head>
 
 <body>
-  <div class="loader" id="loader">
-    <div class="spinner"></div>
-    <p>Analyzing Resume with AI...</p>
-</div>
-<!-- NAVBAR -->
-<div class="navbar">
 
- <div class="logo">Hire Genius</div>
+<!-- ================= NAVBAR ================= -->
 
-<div class="nav-links">
+<nav class="navbar">
 
- <a href="#">Home</a>
+    <div class="logo">
+        Hire <span>Genius</span>
+        <small>✦</small>
+    </div>
 
-   <a href="#">Dashboard</a>
+    <div class="nav-links">
 
-   <a href="#">Feedback</a>
+        <a href="/home">Home</a>
 
-   <a href="#">Contact</a>
+        <a href="/dashboard" class="active">
+            Dashboard
+        </a>
 
-   <a href="/logout">
-    <button class="login">Logout</button>
-    </a>
+        <a href="/feedback">
+            Feedback
+        </a>
 
-</div>
-
-<div class="nav-right">
-    <a href="https://www.canva.com/resumes/templates/" target="_blank">
-    <button class="ai-btn">Create Resume AI</button>
-    </a>
-
-    <span style="color:white;font-weight:bold;margin-left:15px;">
-    👤 {{ username }}
-    </span>
-
-</div>
-
-</div>
-
-<!-- MAIN DASHBOARD -->
-
-<div class="container">
-
-<h1>AI Resume Analyzer Dashboard</h1>
-<!-- ================= HERO SECTION ================= -->
-
-<div class="hero-dashboard">
-
-    <div class="hero-left">
-
-        <h2>👋 Welcome Back, {{ username }}</h2>
-
-        <p>Your AI Career Assistant is ready.</p>
-
-        <div class="resume-status">
-
-            <span>📄 Resume Status</span>
-
-            <span class="status">Ready</span>
-
-        </div>
+        <a href="/contact">
+            Contact
+        </a>
 
     </div>
 
-    <div class="hero-right">
+    <div class="nav-actions">
 
-        <div class="hero-card">
+        <a href="https://www.canva.com/resumes/templates/"
+           target="_blank"
+           class="create-resume">
+            ✨ Create Resume
+        </a>
 
-            <h4>Today's Date</h4>
-
-            <p id="todayDate"></p>
-
+        <div class="user-box">
+            👤 {{ username }}
         </div>
 
-        <div class="hero-card">
-
-            <h4>Last Analysis</h4>
-
-            <p>Just Now</p>
-
-        </div>
+        <a href="/logout" class="logout">
+            Logout
+        </a>
 
     </div>
 
-</div>
+</nav>
 
-<div class="stats">
 
-   <div class="stat-card">
+<!-- ================= MAIN ================= -->
 
-    <div class="card-top blue"></div>
+<main class="dashboard-container">
 
-    <div class="icon">📊</div>
 
-    <h2>{{ score if score else 0 }}%</h2>
+    <!-- ================= WELCOME SECTION ================= -->
 
-    <p>ATS Score</p>
+    <section class="welcome-grid">
 
-   {% if score >= 80 %}
-<span class="status excellent">Excellent</span>
+        <div class="welcome-card">
 
-{% elif score >= 60 %}
-<span class="status good">Good</span>
+            <div class="assistant-label">
+                🤖 AI Career Assistant
+            </div>
 
-{% elif score > 0 %}
-<span class="status average">Needs Improvement</span>
+            <h1>
+                Welcome back, {{ username }}
+                <span>👋</span>
+            </h1>
 
-{% else %}
-<span class="status pending">Not Analyzed</span>
-{% endif %}
+            <p>
+                Analyze your resume, improve your ATS score,
+                practice interviews and discover better career
+                opportunities with AI.
+            </p>
 
-</div>
+            <div class="welcome-buttons">
 
-    <div class="stat-card">
+                <a href="#resume-upload" class="primary-btn">
+                    📄 Analyze Resume
+                </a>
 
-    <div class="card-top pink"></div>
+                <a href="/interview" class="secondary-btn">
+                    🎤 Start Interview
+                </a>
 
-    <div class="icon">🧠</div>
-
-    <h2>{{ skills|length if skills else 0 }}</h2>
-
-    <p>Skills Found</p>
-
-    <span class="status-text good">
-        Updated
-    </span>
-</div>
- <div class="stat-card">
-
-    <div class="card-top purple"></div>
-
-    <div class="icon">🎤</div>
-   <h2>0</h2>
-
-  <p>AI Interview</p>
-
-    <a href="/interview">
-    <button class="mini-btn">
-        Start Now
-    </button>
-   </a>
-</div>
-<div class="stat-card">
-
-    <div class="card-top green"></div>
-
-    <div class="icon">📄</div>
-
-    <h2>0</h2>
-
-    <p>Reports</p>
-
-    <span class="status-text good">
-        Ready
-    </span>
-</div>
-</div>
-<!-- Upload Resume -->
-
-<div class="upload">
-
-<form
-action="/upload"
-method="POST"
-enctype="multipart/form-data"
-onsubmit="showLoader()">
-
-<h3>Upload Your Resume</h3>
-
-<br>
-
-<label class="upload-label" for="resume" id="fileLabel">
-    📄 Choose Resume (PDF)
-</label>
-
-<input
-type="file"
-id="resume"
-name="resume"
-accept=".pdf"
-hidden
-required>
-
-<p id="fileName" style="margin-top:15px;color:#00c6ff;font-weight:bold;">
-    No file selected
-</p>
-
-<br><br>
-
-<button type="submit">📄 Resume Analysis</button>
-
-</form>
-
-</div>
-
-<br>
-
-<!-- Interview -->
-
-<a href="/interview">
-
-<button class="interview-btn">🎤 Mock Interview</button>
-
-</a>
-
-<!-- RESULT -->
-
-<div class="analytics">
-
-    <!-- ATS Circle -->
-    <div class="score-card">
-
-        <div class="circle">
-
-            <svg width="180" height="180">
-
-                <!-- Background Circle -->
-                <circle
-                    class="bg"
-                    cx="90"
-                    cy="90"
-                    r="70"
-                    fill="none"
-                    stroke="#444"
-                    stroke-width="12">
-                </circle>
-
-                <!-- Progress Circle -->
-                <circle
-                    class="progress"
-                    cx="90"
-                    cy="90"
-                    r="70"
-                    fill="none"
-                    stroke="#00c6ff"
-                    stroke-width="12"
-                    stroke-linecap="round"
-                    transform="rotate(-90 90 90)">
-                </circle>
-
-            </svg>
-
-            <div class="score-text">
-                <span id="scoreCounter">0</span>%
             </div>
 
         </div>
 
-        <h3>ATS Score</h3>
 
-    </div>
-    <!-- Skills -->
+        <!-- DATE CARD -->
 
-    <div class="skills-box">
+        <div class="date-card">
 
-        <h3>Detected Skills</h3>
+            <div class="date-item">
 
-        {% if skills %}
+                <div class="date-icon">
+                    📅
+                </div>
 
-        {% for skill in skills %}
+                <div>
+                    <span>Today's Date</span>
 
-        <div class="skill">
+                    <h3 id="todayDate">
+                        Loading...
+                    </h3>
 
-            <span>{{ skill|capitalize }}</span>
+                    <small>Today</small>
+                </div>
 
-          <div class="bar">
-
-            <div class="fill" style="width: {{ [60 + loop.index * 8, 100] | min }}%;"></div>
-
-          </div>
-
-         </div>
-
-        {% endfor %} 
-
-        {% else %}
-
-        <p>No resume analyzed yet.</p>
-
-        {% endif %}
-
-    </div>
+            </div>
 
 
-    <!-- Suggestions -->
+            <div class="date-divider"></div>
 
-    <div class="tips-box">
 
-        <h3>🤖 AI Suggestions</h3>
+            <div class="date-item">
 
-        {% if suggestions %}
+                <div class="date-icon blue">
+                    🕐
+                </div>
 
-        <ul>
+                <div>
+                    <span>Last Analysis</span>
 
-            {% for s in suggestions %}
+                    <h3>Just Now</h3>
 
-            <li>{{ s }}</li>
+                    <small>Recently</small>
+                </div>
 
-            {% endfor %}
+            </div>
 
-        </ul>
+        </div>
 
-        {% else %}
+    </section>
 
-        <p>Upload a resume to receive AI suggestions.</p>
 
-        {% endif %}
 
-    </div>
-<div class="activity-box">
+    <!-- ================= STAT CARDS ================= -->
 
-    <h3>📈 Recent Activity</h3>
+    <section class="stats-grid">
 
-    <div class="activity-item">
-        <span>📄 Resume Uploaded</span>
-        <small>Today</small>
-    </div>
 
-    <div class="activity-item">
-        <span>🤖 AI Analysis Completed</span>
-        <small>Just Now</small>
-    </div>
+        <!-- ATS -->
 
-    <div class="activity-item">
-        <span>🎯 ATS Score Generated</span>
-        <small>Success</small>
-    </div>
+        <div class="stat-card">
+
+            <div class="stat-icon blue-icon">
+                📊
+            </div>
+
+            <div>
+
+                <span>ATS Score</span>
+
+                <h2>
+                    {{ score|default(0) }}%
+                </h2>
+
+                <small class="status-badge">
+                    {% if score %}
+                        Analyzed
+                    {% else %}
+                        Not Analyzed
+                    {% endif %}
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- SKILLS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon purple-icon">
+                🧠
+            </div>
+
+            <div>
+
+                <span>Skills Found</span>
+
+                <h2>
+                    {{ found_skills|length if found_skills else 0 }}
+                </h2>
+
+                <small class="status-badge">
+                    {% if found_skills %}
+                        Skills Detected
+                    {% else %}
+                        Not Analyzed
+                    {% endif %}
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- INTERVIEW -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon orange-icon">
+                🎤
+            </div>
+
+            <div>
+
+                <span>AI Interview</span>
+
+                <h2>0</h2>
+
+                <a href="/interview" class="small-btn">
+                    Start Now →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- REPORTS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon green-icon">
+                📄
+            </div>
+
+            <div>
+
+                <span>Reports</span>
+
+                <h2>0</h2>
+
+                <small class="status-badge">
+                    No Reports
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= MAIN CONTENT GRID ================= -->
+
+    <section class="main-grid">
+
+
+        <!-- ================= RESUME UPLOAD ================= -->
+
+        <div class="panel resume-panel" id="resume-upload">
+
+            <div class="panel-title">
+                <span>📄</span>
+                <h2>Upload Your Resume</h2>
+            </div>
+
+
+           <form action="/upload"
+               method="POST"
+               enctype="multipart/form-data"
+               onsubmit="showLoader()">
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">
+                        ☁️
+                    </div>
+
+                    <h3>
+                        Upload your PDF resume
+                    </h3>
+
+                    <p>
+                        Drag & drop your resume here
+                    </p>
+
+                    <p class="or">
+                        or
+                    </p>
+
+
+                    <!-- REAL INPUT -->
+
+                    <input
+                        type="file"
+                        name="resume"
+                        id="resume"
+                        accept=".pdf"
+                        hidden
+                    >
+
+
+                    <label for="resume" class="choose-btn">
+
+                        📁 Choose Resume (PDF)
+
+                    </label>
+
+
+                    <!-- FILE NAME -->
+
+                    <p id="fileName" class="file-name">
+                        No file selected
+                    </p>
+
+                    <small>
+                        Only PDF files are allowed
+                    </small>
+
+                </div>
+
+
+                <button type="submit"
+                        class="analyze-btn">
+
+                    ✨ Analyze Resume
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- ================= ANALYSIS PANEL ================= -->
+
+        <div class="panel analysis-panel">
+
+
+            <!-- ATS SCORE -->
+
+            <div class="analysis-column">
+
+                <div class="panel-title">
+
+                    <span>📊</span>
+
+                    <h2>ATS Score</h2>
+
+                </div>
+
+
+                <div class="circle-container">
+
+                    <svg class="score-circle"
+                         width="160"
+                         height="160">
+
+                        <circle
+                            class="circle-bg"
+                            cx="80"
+                            cy="80"
+                            r="65">
+                        </circle>
+
+                        <circle
+                            class="circle-progress"
+                            id="scoreProgress"
+                            cx="80"
+                            cy="80"
+                            r="65">
+                        </circle>
+
+                    </svg>
+
+
+                    <div class="score-number">
+
+                        <span id="scoreCounter">
+                            0
+                        </span>
+
+                        <span>%</span>
+
+                    </div>
+
+                </div>
+
+
+                <h3 class="analysis-status">
+
+                    {% if score %}
+                        Resume Analyzed
+                    {% else %}
+                        Not Analyzed
+                    {% endif %}
+
+                </h3>
+
+                <p class="analysis-text">
+                    Upload your resume to get your ATS score.
+                </p>
+
+            </div>
+
+
+
+            <!-- DETECTED SKILLS -->
+
+            <div class="analysis-column skills-column">
+
+                <div class="panel-title">
+
+                    <span>🧠</span>
+
+                    <h2>Detected Skills</h2>
+
+                </div>
+
+
+                {% if found_skills %}
+
+                    <div class="skills-list">
+
+                        {% for skill in found_skills %}
+
+                        <div class="skill-item">
+
+                            <div class="skill-header">
+
+                                <span>
+                                    {{ skill }}
+                                </span>
+
+                                <span>
+                                    {{ 70 + (loop.index * 5) }}%
+                                </span>
+
+                            </div>
+
+                            <div class="skill-bar">
+
+                                <div
+                                    class="skill-fill"
+                                    style="width: {{ 70 + (loop.index * 5) }}%;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-analysis">
+
+                        🧠
+
+                        <p>
+                            Upload your resume to detect
+                            your skills and strengths.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- AI SUGGESTIONS -->
+
+            <div class="analysis-column">
+
+                <div class="panel-title">
+
+                    <span>🤖</span>
+
+                    <h2>AI Suggestions</h2>
+
+                </div>
+
+
+                {% if suggestions %}
+
+                    <ul class="suggestions-list">
+
+                        {% for suggestion in suggestions %}
+
+                        <li>
+                            {{ suggestion }}
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% else %}
+
+                    <div class="empty-analysis">
+
+                        🤖
+
+                        <p>
+                            Upload your resume to get
+                            AI-powered suggestions.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= RECENT ACTIVITY ================= -->
+
+        <div class="panel activity-panel">
+
+            <div class="panel-title">
+
+                <span>🕐</span>
+
+                <h2>Recent Activity</h2>
+
+            </div>
+
+
+            <div class="activity">
+
+                <div class="activity-icon green-icon">
+                    📄
+                </div>
+
+                <div>
+
+                    <strong>
+                        Resume Uploaded
+                    </strong>
+
+                    <p>
+                        Your resume was uploaded
+                        for analysis.
+                    </p>
+
+                </div>
+
+                <small>
+                    Today
+                </small>
+
+            </div>
+
+
+            <div class="activity">
+
+                <div class="activity-icon purple-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <strong>
+                        AI Analysis
+                    </strong>
+
+                    <p>
+                        Resume analysis completed.
+                    </p>
+
+                </div>
+
+                <small>
+                    Just Now
+                </small>
+
+            </div>
+
+
+            <div class="activity">
+
+                <div class="activity-icon blue-icon">
+                    🎯
+                </div>
+
+                <div>
+
+                    <strong>
+                        ATS Score Generated
+                    </strong>
+
+                    <p>
+                        Your latest ATS score was calculated.
+                    </p>
+
+                </div>
+
+                <small>
+                    Just Now
+                </small>
+
+            </div>
+
+
+            <button class="view-activity">
+                View All Activity →
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= JOB RECOMMENDATIONS ================= -->
+
+    <section class="panel jobs-panel">
+
+        <div class="jobs-header">
+
+            <div class="panel-title">
+
+                <span>💼</span>
+
+                <h2>
+                    Recommended Jobs For You
+                </h2>
+
+            </div>
+
+            <button class="view-jobs">
+                View All Jobs →
+            </button>
+
+        </div>
+
+
+        <div class="jobs-grid">
+
+            {% if job_list %}
+
+                {% for job in job_list %}
+
+                <div class="job-card">
+
+                    <div class="job-icon">
+                        💼
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ job }}
+                        </h3>
+
+                        <span>
+                            Strong match
+                        </span>
+
+                        <button>
+                            Explore Job →
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="no-jobs">
+
+                    💼
+
+                    <p>
+                        Upload your resume to get
+                        personalized job recommendations.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= BOTTOM CARDS ================= -->
+
+    <section class="bottom-grid">
+
+
+        <div class="bottom-card feedback-card">
+
+            <div>
+                💬
+            </div>
+
+            <h2>
+                Give Feedback
+            </h2>
+
+            <p>
+                Help us improve Hire Genius with
+                your valuable feedback.
+            </p>
+
+            <a href="/feedback">
+                Give Feedback →
+            </a>
+
+        </div>
+
+
+        <div class="bottom-card contact-card">
+
+            <div>
+                📞
+            </div>
+
+            <h2>
+                Contact Us
+            </h2>
+
+            <p>
+                Need help? Our support team is
+                here for you.
+            </p>
+
+            <a href="/contact">
+                Contact Us →
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- ================= LOADER ================= -->
+
+<div class="loader"
+     id="loader">
+
+    <div class="spinner"></div>
+
+    <p>
+        Analyzing Resume with AI...
+    </p>
 
 </div>
-</div>
-<!-- FEATURES -->
 
- <div class="features">
 
-  <div class="card">
-    <h3>Resume Analysis</h3>
-    <p>AI scans resume and detects important skills.</p>
-  </div>
-
-   <div class="card">
-    <h3>Mock Interview</h3>
-    <p>Practice real interview questions with AI.</p>
-   </div>
-
-   <div class="card">
-     <h3>Job Suggestions</h3>
-      <p>Find jobs based on your skills and resume.</p>
-    </div>
-
- </div>
-
-</div>
+<script src="{{ url_for('static', filename='js/dash.js') }}"></script>
 
 </body>
 </html>

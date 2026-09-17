@@ -1,194 +1,152 @@
-let totalTime = 30;
-let time = totalTime;
-let timerInterval = null;
+document.addEventListener("DOMContentLoaded", function () {
 
-/* Start Timer */
+    /* ===============================
+       TODAY'S DATE
+    =============================== */
 
-function startTimer(){
+    const todayDate = document.getElementById("todayDate");
 
-stopTimer();   // prevent multiple timers
+    if (todayDate) {
 
-time = totalTime;
+        const today = new Date();
 
-updateTimerUI();
+        const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        };
 
-timerInterval = setInterval(() => {
-
-time--;
-
-updateTimerUI();
-
-/* Warning colors */
-
-let timerElement = document.getElementById("timer");
-
-if(time <= 5){
-timerElement.style.color = "red";
-speakWarning("Five seconds remaining");
-}
-else if(time <= 10){
-timerElement.style.color = "orange";
-}
-else{
-timerElement.style.color = "#00ffcc";
-}
-
-/* Time finished */
-
-if(time <= 0){
-
-stopTimer();
-
-timerElement.innerText = "Time Over ⏱️";
-
-/* Next Question */
-
-if(typeof index !== "undefined"){
-index++;
-}
-
-setTimeout(() => {
-
-if(typeof askQuestion === "function"){
-askQuestion();
-}
-
-},2000);
-
-}
-
-},1000);
-
-}
-
-/* Stop Timer */
-
-function stopTimer(){
-
-if(timerInterval !== null){
-
-clearInterval(timerInterval);
-
-timerInterval = null;
-
-}
-
-}
-
-/* Reset Timer */
-
-function resetTimer(){
-
-stopTimer();
-
-time = totalTime;
-
-updateTimerUI();
-
-}
-
-/* Update UI */
-
-function updateTimerUI(){
-
-document.getElementById("timer").innerText = "Time Left: " + time + "s";
-
-let progress = ((totalTime - time) / totalTime) * 100;
-
-document.getElementById("progress").style.width = progress + "%";
-
-}
-
-/* Voice Warning */
-
-function speakWarning(text){
-
-if(!window.speechSynthesis) return;
-
-let speech = new SpeechSynthesisUtterance(text);
-
-speech.rate = 1;
-speech.pitch = 1;
-
-window.speechSynthesis.speak(speech);
-
-}
-
-const resumeInput = document.getElementById("resume");
-const uploadLabel = document.querySelector(".upload-label");
-const fileName = document.getElementById("fileName");
-
-uploadLabel.onclick = function () {
-    resumeInput.click();
-};
-
-resumeInput.addEventListener("change", function () {
-
-    if (this.files.length > 0) {
-
-        fileName.innerHTML = "📄 " + this.files[0].name;
-
-    } else {
-
-        fileName.innerHTML = "No file selected";
-
+        todayDate.textContent =
+            today.toLocaleDateString("en-US", options);
     }
 
-});
-const fileInput = document.getElementById("resume");
-const fileLabel = document.getElementById("fileLabel");
 
-fileInput.addEventListener("change", function(){
+    /* ===============================
+       RESUME FILE SELECTION
+    =============================== */
 
-    if(this.files.length > 0){
+    const resumeInput = document.getElementById("resume");
+    const fileName = document.getElementById("fileName");
 
-        fileLabel.innerHTML =
-        "✅ " + this.files[0].name;
+    if (resumeInput && fileName) {
 
+        resumeInput.addEventListener("change", function () {
+
+            if (this.files && this.files.length > 0) {
+
+                const selectedFile = this.files[0];
+
+                fileName.textContent =
+                    "📄 " + selectedFile.name;
+
+                fileName.classList.add("selected");
+
+            } else {
+
+                fileName.textContent =
+                    "No file selected";
+
+                fileName.classList.remove("selected");
+            }
+        });
     }
 
-});
 
-const score = Number('{{ score|default(0) }}');
-const progress = document.querySelector(".score-card .progress");
-const counter = document.getElementById("scoreCounter");
+    /* ===============================
+       ATS SCORE CIRCLE
+    =============================== */
 
-if (progress) {
+    const progressCircle =
+        document.getElementById("scoreProgress");
 
-    const radius = 70;
-    const circumference = 2 * Math.PI * radius;
+    const scoreCounter =
+        document.getElementById("scoreCounter");
 
-    progress.style.strokeDasharray = circumference;
-    progress.style.strokeDashoffset = circumference;
+    let score =
+        Number(window.ATS_SCORE || 0);
 
-    let current = 0;
+    if (isNaN(score)) {
+        score = 0;
+    }
 
-    const timer = setInterval(() => {
+    score = Math.max(0, Math.min(100, score));
 
-        if (current >= score) {
-            clearInterval(timer);
-            return;
+
+    if (progressCircle && scoreCounter) {
+
+        const radius = 65;
+
+        const circumference =
+            2 * Math.PI * radius;
+
+        progressCircle.style.strokeDasharray =
+            circumference;
+
+        progressCircle.style.strokeDashoffset =
+            circumference;
+
+        let current = 0;
+
+        const duration = 1200;
+
+        const startTime = performance.now();
+
+
+        function animateScore(currentTime) {
+
+            const elapsed =
+                currentTime - startTime;
+
+            const progress =
+                Math.min(elapsed / duration, 1);
+
+            current =
+                Math.round(score * progress);
+
+            scoreCounter.textContent =
+                current;
+
+            const offset =
+                circumference -
+                (current / 100) * circumference;
+
+            progressCircle.style.strokeDashoffset =
+                offset;
+
+
+            if (progress < 1) {
+
+                requestAnimationFrame(
+                    animateScore
+                );
+
+            } else {
+
+                scoreCounter.textContent =
+                    score;
+            }
         }
 
-        current++;
 
-        counter.innerHTML = current;
+        requestAnimationFrame(
+            animateScore
+        );
+    }
 
-        progress.style.strokeDashoffset =
-            circumference - (current / 100) * circumference;
 
-    }, 20);
-}
+    /* ===============================
+       LOADER
+    =============================== */
 
-function showLoader() {
-    document.getElementById("loader").style.display = "flex";
-}
-const options = {
-    weekday:'long',
-    year:'numeric',
-    month:'long',
-    day:'numeric'
-};
+    window.showLoader = function () {
 
-document.getElementById("todayDate").innerHTML =
-new Date().toLocaleDateString("en-US", options);
+        const loader =
+            document.getElementById("loader");
+
+        if (loader) {
+            loader.style.display = "flex";
+        }
+    };
+
+});

@@ -1,43 +1,305 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login - AI Career Platform</title>
+    <title>Login | HireGenius</title>
 
-<link rel="stylesheet" href="/static/css/login.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
-<div class="container">
+<div class="background-effects">
+    <span class="glow glow-1"></span>
+    <span class="glow glow-2"></span>
+    <span class="glow glow-3"></span>
+</div>
 
-<div class="left">
+<div class="page">
 
-<img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+    <!-- ================= LEFT SIDE ================= -->
+
+    <section class="intro">
+
+        <div class="brand">
+            <div class="brand-logo">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+
+            <div>
+                <h2>Hire<span>Genius</span></h2>
+                <p>AI Career Assistant</p>
+            </div>
+        </div>
+
+
+        <div class="intro-content">
+
+            <div class="ai-visual">
+
+                <div class="orbit orbit-1"></div>
+                <div class="orbit orbit-2"></div>
+                <div class="orbit orbit-3"></div>
+
+                <div class="robot">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+
+                <div class="floating-card card-one">
+                    <i class="fa-solid fa-file-circle-check"></i>
+                </div>
+
+                <div class="floating-card card-two">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div class="floating-card card-three">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+
+            </div>
+
+
+            <h1>
+                Better Skills.<br>
+                Bigger <span>Opportunities.</span>
+            </h1>
+
+            <p class="intro-text">
+                Analyze your resume, improve your skills,
+                prepare for interviews and move closer
+                to your dream job.
+            </p>
+
+
+            <div class="features">
+
+                <div class="feature">
+                    <div class="feature-icon blue">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+
+                    <span>
+                        AI Resume<br>
+                        Analysis
+                    </span>
+                </div>
+
+
+                <div class="feature">
+                    <div class="feature-icon purple">
+                        <i class="fa-solid fa-microphone"></i>
+                    </div>
+
+                    <span>
+                        AI Interview<br>
+                        Practice
+                    </span>
+                </div>
+
+
+                <div class="feature">
+                    <div class="feature-icon cyan">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <span>
+                        Career<br>
+                        Insights
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= LOGIN SIDE ================= -->
+
+    <section class="login-area">
+
+        <div class="login-card">
+
+            <div class="mobile-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+
+                <strong>
+                    Hire<span>Genius</span>
+                </strong>
+            </div>
+
+
+            <div class="login-heading">
+
+                <h1>Welcome Back <span>👋</span></h1>
+
+                <p>
+                    Sign in to your HireGenius account
+                </p>
+
+            </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        {% for category, message in messages %}
+
+            <div class="error-message">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endwith %}
+
+            <!-- Flask Login Form -->
+
+            <form action="/login" method="POST">
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-regular fa-user input-icon"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock input-icon"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                            aria-label="Show password">
+
+                            <i
+                                id="eyeIcon"
+                                class="fa-regular fa-eye">
+                            </i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="login-button">
+
+                    <span>Login</span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+
+            <p class="signup-text">
+
+                Don't have an account?
+
+                <a href="/signup">
+                    Create Account
+                </a>
+
+            </p>
+
+
+            <div class="security">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Secure & AI-powered platform
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
 
-<div class="right">
 
-<h2>Login to AI Career Platform</h2>
+<script>
 
-<form action="/login" method="POST">
+function togglePassword() {
 
-<input type="text" name="username" placeholder="Enter Username" required>
+    const password =
+        document.getElementById("password");
 
-<input type="password" name="password" placeholder="Enter Password" required>
+    const eye =
+        document.getElementById("eyeIcon");
 
-<button type="submit">Login</button>
+    if (password.type === "password") {
 
-</form>
+        password.type = "text";
 
-<a href="/signup">Create Account</a>
+        eye.classList.remove("fa-eye");
+        eye.classList.add("fa-eye-slash");
 
-</div>
+    } else {
 
-</div>
+        password.type = "password";
+
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+
+    }
+}
+
+</script>
 
 </body>
-
 </html>

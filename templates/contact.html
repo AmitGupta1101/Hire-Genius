@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact - Hire Genius</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/contact.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+    <!-- LEFT: LOGO -->
+    <div class="logo">
+        Hire <span>Genius</span>
+    </div>
+
+    <!-- CENTER: NAVIGATION -->
+    <div class="nav-links">
+
+        <a href="{{ url_for('home_page') }}">
+            🏠 Home
+        </a>
+
+        <a href="{{ url_for('dashboard') }}">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('feedback') }}">
+            💬 Feedback
+        </a>
+
+        <a href="{{ url_for('contact') }}" class="active">
+            📞 Contact
+        </a>
+
+    </div>
+
+    <!-- RIGHT: LOGOUT -->
+    <div class="nav-right">
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+<!-- CONTACT HERO -->
+    <section class="contact-section">
+
+        <div class="contact-header">
+
+            <span class="small-title">📞 GET IN TOUCH</span>
+
+            <h1>
+                Contact <span>Hire Genius</span>
+            </h1>
+
+            <p>
+                Have a question, suggestion, or need help?
+                We're here to help you build a better career.
+            </p>
+
+        </div>
+
+
+        <!-- CONTACT CARDS -->
+
+        <div class="contact-container">
+
+
+            <!-- EMAIL -->
+
+            <div class="contact-card">
+
+                <div class="icon email-icon">
+                    📧
+                </div>
+
+                <div>
+
+                    <h3>Email Us</h3>
+
+                    <p>
+                        Have a question? Send us an email.
+                    </p>
+
+                    <a href="mailto:thisisamit845@gmail.com">
+                        thisisamit845@gmail.com
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="contact-card">
+
+                <div class="icon phone-icon">
+                    📱
+                </div>
+
+                <div>
+
+                    <h3>Call Us</h3>
+
+                    <p>
+                        Available for career-related queries.
+                    </p>
+
+                    <a href="tel:+917379410375">
+                        +91 7379410375
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="contact-card">
+
+                <div class="icon location-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h3>Location</h3>
+
+                    <p>
+                        Our location
+                    </p>
+
+                    <span>
+                        Gorakhpur, Uttar Pradesh, India
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- BOTTOM CARD -->
+
+        <div class="help-card">
+
+            <div>
+
+                <span class="help-icon">🤖</span>
+
+                <h2>
+                    Need help with your resume?
+                </h2>
+
+                <p>
+                    Upload your resume and let Hire Genius
+                    analyze your ATS score, skills and career opportunities.
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('dashboard') }}" class="dashboard-btn">
+                Analyze My Resume →
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © 2026 <strong>Hire Genius</strong>.
+            Built to help you build your career.
+        </p>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hire Genius | AI Career Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/home.css') }}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <a href="{{ url_for('home_page') }}" class="brand">
+
+        <div class="brand-icon">
+            🧠
+        </div>
+
+        <span>Hire <strong>Genius</strong></span>
+
+    </a>
+
+
+    <nav class="nav-links">
+
+        <a href="{{ url_for('home_page') }}" class="active">
+            Home
+        </a>
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('feedback') }}">
+            Feedback
+        </a>
+
+        <a href="{{ url_for('contact') }}">
+            Contact
+        </a>
+
+    </nav>
+
+
+    <a href="{{ url_for('logout') }}" class="logout-btn">
+        ⇥ Logout
+    </a>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<main class="hero">
+
+    <!-- LEFT SIDE -->
+
+    <section class="hero-content">
+
+        <div class="ai-badge">
+            ✨ AI POWERED CAREER ASSISTANT
+        </div>
+
+
+        <h1>
+
+            Your Career,
+
+            <br>
+
+            Our
+            <span>Intelligence.</span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Analyze your resume, practice interviews and get
+            personalized job recommendations with the power
+            of AI.
+
+        </p>
+
+
+        <!-- BUTTONS -->
+
+        <div class="hero-buttons">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="primary-btn">
+
+                📄 Analyze My Resume
+
+            </a>
+
+
+            <a href="{{ url_for('dashboard') }}"
+               class="secondary-btn">
+
+                ▦ Explore Dashboard
+
+            </a>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-icon blue">
+                    👥
+                </div>
+
+                <div>
+
+                    <h3>10K+</h3>
+
+                    <p>Active Users</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon purple">
+                    📄
+                </div>
+
+                <div>
+
+                    <h3>25K+</h3>
+
+                    <p>Resumes Analyzed</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon green">
+                    📈
+                </div>
+
+                <div>
+
+                    <h3>95%</h3>
+
+                    <p>Accuracy</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon yellow">
+                    ⭐
+                </div>
+
+                <div>
+
+                    <h3>4.8/5</h3>
+
+                    <p>User Rating</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= AI VISUAL ================= -->
+
+    <section class="ai-section">
+
+
+        <!-- GLOW -->
+
+        <div class="glow-circle"></div>
+
+
+        <!-- ATS CARD -->
+
+        <div class="floating-card ats-card">
+
+            <h4>ATS Score</h4>
+
+            <div class="mini-circle">
+
+                <span>92%</span>
+
+            </div>
+
+            <p>
+                🟢 Excellent
+            </p>
+
+        </div>
+
+
+        <!-- SKILLS CARD -->
+
+        <div class="floating-card skills-card">
+
+            <h4>Detected Skills</h4>
+
+            <div class="skill-row">
+                <span>Python</span>
+                <b>✓</b>
+            </div>
+
+            <div class="skill-row">
+                <span>SQL</span>
+                <b>✓</b>
+            </div>
+
+            <div class="skill-row">
+                <span>Machine Learning</span>
+                <b>✓</b>
+            </div>
+
+            <div class="skill-row">
+                <span>React</span>
+                <b>✓</b>
+            </div>
+
+            <div class="skill-row">
+                <span>Flask</span>
+                <b>✓</b>
+            </div>
+
+        </div>
+
+
+        <!-- AI ROBOT -->
+
+        <div class="robot-wrapper">
+
+            <div class="robot-ring"></div>
+
+            <div class="robot">
+
+                <div class="robot-head">
+
+                    <div class="robot-eyes">
+
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+                <div class="robot-body">
+
+                    <div class="robot-logo">
+                        HG
+                    </div>
+
+                </div>
+
+                <div class="robot-arm left-arm"></div>
+
+                <div class="robot-arm right-arm"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- JOB CARD -->
+
+        <div class="floating-card jobs-card">
+
+            <h4>
+                Top Jobs For You
+            </h4>
+
+            <div class="job">
+                <span>AI Engineer</span>
+                <b>›</b>
+            </div>
+
+            <div class="job">
+                <span>Data Scientist</span>
+                <b>›</b>
+            </div>
+
+            <div class="job">
+                <span>Backend Developer</span>
+                <b>›</b>
+            </div>
+
+            <div class="job">
+                <span>ML Engineer</span>
+                <b>›</b>
+            </div>
+
+        </div>
+
+
+        <!-- INTERVIEW CARD -->
+
+        <div class="floating-card interview-card">
+
+            <div class="mic">
+                🎙️
+            </div>
+
+            <div>
+
+                <h4>
+                    Interview Practice
+                </h4>
+
+                <p>
+                    Start AI Interview
+                </p>
+
+                <span>
+                    Practice Now →
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <!-- CARD 1 -->
+
+    <div class="feature-card blue-border">
+
+        <div class="feature-icon blue-icon">
+            📄
+        </div>
+
+        <div>
+
+            <h3>
+                Resume Analyzer
+            </h3>
+
+            <p>
+                Upload your resume and get an ATS score,
+                detected skills and improvement suggestions.
+            </p>
+
+        </div>
+
+        <div class="arrow">
+            →
+        </div>
+
+    </div>
+
+
+    <!-- CARD 2 -->
+
+    <div class="feature-card purple-border">
+
+        <div class="feature-icon purple-icon">
+            🎙️
+        </div>
+
+        <div>
+
+            <h3>
+                AI Interview
+            </h3>
+
+            <p>
+                Practice interview questions and improve
+                your technical interview performance.
+            </p>
+
+        </div>
+
+        <div class="arrow">
+            →
+        </div>
+
+    </div>
+
+
+    <!-- CARD 3 -->
+
+    <div class="feature-card green-border">
+
+        <div class="feature-icon green-icon">
+            💼
+        </div>
+
+        <div>
+
+            <h3>
+                Job Recommendations
+            </h3>
+
+            <p>
+                Get personalized job recommendations
+                based on your skills and experience.
+            </p>
+
+        </div>
+
+        <div class="arrow">
+            →
+        </div>
+
+    </div>
+
+
+    <!-- CARD 4 -->
+
+    <div class="feature-card yellow-border">
+
+        <div class="feature-icon yellow-icon">
+            ⭐
+        </div>
+
+        <div>
+
+            <h3>
+                Smart Feedback
+            </h3>
+
+            <p>
+                Get AI-powered feedback to improve your
+                resume and career growth.
+            </p>
+
+        </div>
+
+        <div class="arrow">
+            →
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div>
+        © 2026 <strong>Hire Genius</strong>
+    </div>
+
+    <div>
+        AI-powered career assistant
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

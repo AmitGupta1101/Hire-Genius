@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hire Genius - Feedback</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/feedback.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Hire <span>Genius</span>
+        <small>✦</small>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home_page') }}">Home</a>
+
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+
+        <a href="{{ url_for('feedback') }}" class="active">
+            Feedback
+        </a>
+
+        <a href="{{ url_for('contact') }}">
+            Contact
+        </a>
+
+    </div>
+
+    <div class="nav-right">
+
+        <a href="https://www.canva.com/resumes/templates/"
+           target="_blank"
+           class="create-resume">
+            ✨ Create Resume
+        </a>
+
+        <span class="username">
+            👤 {{ username }}
+        </span>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="feedback-page">
+
+    <!-- Header -->
+
+    <section class="feedback-header">
+
+        <div class="header-icon">
+            💬
+        </div>
+
+        <div>
+            <p class="small-title">YOUR OPINION MATTERS</p>
+
+            <h1>
+                Give Your <span>Feedback</span>
+            </h1>
+
+            <p class="subtitle">
+                Help us improve Hire Genius and make your AI career
+                experience even better.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- Main Content -->
+
+    <section class="feedback-container">
+
+        <!-- LEFT SIDE -->
+
+        <div class="feedback-info">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🚀
+                </div>
+
+                <h2>Help Us Improve</h2>
+
+                <p>
+                    Your feedback helps us understand what works,
+                    what doesn't, and how we can make Hire Genius
+                    better for students and job seekers.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🤖
+                </div>
+
+                <h2>AI Career Assistant</h2>
+
+                <p>
+                    Tell us about your experience with resume analysis,
+                    ATS scoring, AI suggestions and interview preparation.
+                </p>
+
+            </div>
+
+
+            <div class="feedback-stats">
+
+                <div>
+                    <strong>24/7</strong>
+                    <span>AI Assistant</span>
+                </div>
+
+                <div>
+                    <strong>AI</strong>
+                    <span>Powered</span>
+                </div>
+
+                <div>
+                    <strong>100%</strong>
+                    <span>User Focused</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE FORM -->
+
+        <div class="feedback-card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    📝
+                </div>
+
+                <div>
+                    <h2>Share Your Experience</h2>
+
+                    <p>
+                        We would love to hear from you.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form method="POST"
+                  action="{{ url_for('feedback') }}">
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Your Name
+                    </label>
+
+                    <div class="input-box">
+
+                        <span>👤</span>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your name"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-box">
+
+                        <span>✉️</span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Rating -->
+
+                <div class="form-group">
+
+                    <label>
+                        How was your experience?
+                    </label>
+
+                    <div class="rating">
+
+                        <input type="radio"
+                               name="rating"
+                               id="star5"
+                               value="5"
+                               required>
+
+                        <label for="star5">★</label>
+
+
+                        <input type="radio"
+                               name="rating"
+                               id="star4"
+                               value="4">
+
+                        <label for="star4">★</label>
+
+
+                        <input type="radio"
+                               name="rating"
+                               id="star3"
+                               value="3">
+
+                        <label for="star3">★</label>
+
+
+                        <input type="radio"
+                               name="rating"
+                               id="star2"
+                               value="2">
+
+                        <label for="star2">★</label>
+
+
+                        <input type="radio"
+                               name="rating"
+                               id="star1"
+                               value="1">
+
+                        <label for="star1">★</label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Feedback -->
+
+                <div class="form-group">
+
+                    <label for="message">
+                        Your Feedback
+                    </label>
+
+                    <div class="textarea-box">
+
+                        <span>💭</span>
+
+                        <textarea
+                            id="message"
+                            name="feedback"
+                            rows="6"
+                            placeholder="Tell us what you think..."
+                            required></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button type="submit"
+                        class="submit-btn">
+
+                    <span>🚀</span>
+
+                    Submit Feedback
+
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- Bottom Message -->
+
+    <section class="bottom-message">
+
+        <div class="heart">
+            💙
+        </div>
+
+        <div>
+            <h3>Thank you for helping us grow!</h3>
+
+            <p>
+                Every piece of feedback helps make Hire Genius better.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 <strong>Hire Genius</strong>.
+        Built with ❤️ for your career journey.
+    </p>
+
+</footer>
+
+</body>
+</html>
